@@ -1,0 +1,47 @@
+"""Schema re-exports for backward compatibility.
+
+All domain models are now defined in ``app.models.scan_models``.
+This module re-exports them so existing imports continue to work.
+"""
+
+from app.models.scan_models import (  # noqa: F401
+    ContextRuleSummary,
+    CredentialExposure,
+    DataFlowRisk,
+    DatasetAnalysisRequest,
+    DatasetAnalysisResponse,
+    DatasetAnalysisSummary,
+    DatasetItemRequest,
+    DatasetItemResult,
+    DetectionFlags,
+    ErrorDetail,
+    ErrorResponse,
+    HealthResponse,
+    InputKind,
+    NormalizedInput,
+    OAuthAnalysis,
+    OAuthScopeRisk,
+    Pattern,
+    PatternOp,
+    PdfRequest,
+    PipelineRequest,
+    PipelineResult,
+    RiskLevel,
+    Rule,
+    RuleEngineResult,
+    RuleEvalRequest,
+    RuleMatch,
+    RuleSet,
+    RuleSetResponse,
+    RulesInfo,
+    SaaSSignalSummary,
+    ScanInput,
+    ScanInputResponse,
+    ScanReport,
+    TextFinding,
+    TextScanResult,
+    TextScanRule,
+    TextScanRuleCategory,
+    TextScanRuleSummary,
+    TokenAnalysis,
+)

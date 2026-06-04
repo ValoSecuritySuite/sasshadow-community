@@ -1,0 +1,14 @@
+{
+  "integration_id": "salesforce_to_slack_demo",
+  "source_app": "salesforce",
+  "destination_app": "slack",
+  "oauth": {
+    "scopes": ["files.readwrite.all", "users.read", "admin"]
+  },
+  "tokens": {
+    "slack_bot_token": "xoxb-EXAMPLE-NOT-A-REAL-TOKEN-000000000000",
+    "rotation_enabled": false
+  },
+  "data_types": ["pii", "financial"],
+  "description": "Demo integration that pushes Salesforce records into a Slack channel."
+}

@@ -1,0 +1,422 @@
+{
+  "dataset_name": "enterprise_saas_risk_demo",
+  "items": [
+    {
+      "integration_id": "github_to_jira",
+      "json_data": {
+        "source_app": "github",
+        "destination_app": "jira",
+        "description": "GitHub commits and PRs linked to Jira tickets",
+        "oauth": {
+          "provider": "github",
+          "scopes": ["repo", "read:org", "admin:repo_hook", "write:discussion"]
+        },
+        "credentials": {
+          "github_token": "ghp_a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q7R8",
+          "jira_api_token": "ATATT3xFfGF0VnM4aDVxOXhGdkx6Wm5tcVhPenBDQWR0M2J5",
+          "expires_in_days": 365
+        },
+        "data_types": ["credentials", "customer_data"]
+      },
+      "metadata": {
+        "token_rotation_enabled": false,
+        "environment": "production"
+      }
+    },
+    {
+      "integration_id": "okta_to_aws",
+      "json_data": {
+        "source_app": "okta",
+        "destination_app": "aws",
+        "description": "Okta SSO federation to AWS IAM Identity Center",
+        "oauth": {
+          "provider": "okta",
+          "scopes": ["openid", "profile", "email", "groups"]
+        },
+        "credentials": {
+          "access_token": "eyJraWQiOiJXMEtJbEhkSVRhbU5vdXgxMzBpc0ZEXzd5TGNhRGFhVEE2bGtYV3ciLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NvcnAub2t0YS5jb20iLCJhdWQiOiIwb2F4eHh4eHh4eCIsInN1YiI6InNzby1zZXJ2aWNlIn0.sig",
+          "expires_in_days": 1
+        },
+        "data_types": ["credentials"]
+      },
+      "metadata": {
+        "token_rotation_enabled": true,
+        "environment": "production"
+      }
+    },
+    {
+      "integration_id": "slack_to_openai",
+      "json_data": {
+        "source_app": "slack",
+        "destination_app": "openai",
+        "description": "Slack messages and threads sent to OpenAI for summarization and Q&A",
+        "oauth": {
+          "provider": "slack",
+          "scopes": ["channels:history", "channels:read", "chat:write", "users:read", "users:read.email", "files:read"]
+        },
+        "credentials": {
+          "slack_bot_token": "xoxb-1234567890123-1234567890123-AbCdEfGhIjKlMnOpQrStUvWx",
+          "openai_api_key": "sk-proj-a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0",
+          "expires_in_days": 90
+        },
+        "api_provider": "openai",
+        "data_types": ["pii", "customer_data"]
+      },
+      "metadata": {
+        "token_rotation_enabled": false,
+        "environment": "production"
+      }
+    },
+    {
+      "integration_id": "google_drive_to_external_ai_automation",
+      "json_data": {
+        "source_app": "google drive",
+        "destination_app": "external ai agent",
+        "description": "Google Drive files sent to external LLM workflow for document analysis",
+        "oauth": {
+          "provider": "google",
+          "scopes": [
+            "https://www.googleapis.com/auth/drive.readonly",
+            "https://www.googleapis.com/auth/documents.readonly"
+          ],
+          "client_secret": "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"
+        },
+        "credentials": {
+          "access_token": "ya29.a0AfH6SMDqkPzB_qX1234567890abcdefghijklmnopqrstuvwxyz",
+          "webhook_url": "https://api.anthropic.com/v1/messages",
+          "expires_in_days": 180
+        },
+        "provider": "anthropic",
+        "model": "claude-3-opus",
+        "data_types": ["pii", "customer_data", "financial"]
+      },
+      "metadata": {
+        "token_rotation_enabled": false,
+        "environment": "production"
+      }
+    },
+    {
+      "integration_id": "microsoft365_to_salesforce_crm_sync",
+      "json_data": {
+        "source_app": "microsoft365",
+        "destination_app": "salesforce",
+        "description": "M365 calendar and contacts sync to Salesforce CRM",
+        "oauth": {
+          "provider": "azure_ad",
+          "scopes": [
+            "openid",
+            "profile",
+            "email",
+            "offline_access",
+            "Calendars.ReadWrite",
+            "Contacts.ReadWrite",
+            "Mail.Send",
+            "User.Read.All",
+            "Directory.ReadWrite.All",
+            "Sites.Manage.All"
+          ],
+          "client_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+          "client_secret": "xMs8Q~ABCDefghIJKLmnopQRStuvWXyz1234567"
+        },
+        "credentials": {
+          "access_token": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UQXhORFUzTkRZMk16YzNSRUZFUmpnelFrTTVOVFF3UmpNeE9UZEdSRFZGTWtRMk5ETTRSUSJ9.eyJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20iLCJzdWIiOiJhYmMxMjMiLCJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJleHAiOjE3MzA1MDAwMDB9.fakesignature",
+          "refresh_token": "0.ARwA6E4R-m3z4UGFv0hPp3MjnQEAAAAAAAAAwJkHkQI5RpCR3Y2v7HEKjvXqCSwgHp8nTXjYbmthZW10b2tlbg",
+          "expires_in_days": 365
+        },
+        "webhook_url": "https://hooks.salesforce.com/services/sync?access_token=xMs8Q~ABCDefghIJKLmnopQRStuvWXyz1234567",
+        "data_types": ["pii", "customer_data", "credentials"]
+      },
+      "metadata": {
+        "token_rotation_enabled": false,
+        "provisioned_by": "IT Admin",
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "slack_to_jira_ticket_creation",
+      "json_data": {
+        "source_app": "slack",
+        "destination_app": "jira",
+        "description": "Slack workflow that creates Jira tickets from reactions",
+        "oauth": {
+          "provider": "slack",
+          "scopes": [
+            "channels:read",
+            "channels:history",
+            "reactions:read",
+            "chat:write",
+            "users:read",
+            "users:read.email"
+          ]
+        },
+        "credentials": {
+          "slack_bot_token": "xoxb-1234567890123-1234567890123-AbCdEfGhIjKlMnOpQrStUvWx",
+          "jira_api_token": "ATATT3xFfGF0VnM4aDVxOXhGdkx6Wm5tcVhPenBDQWR0M2J5U2txd2ZDcm5wYjdUQThIbVBEcmRoYXAxcHRPZQ",
+          "expires_in_days": 90
+        },
+        "data_types": ["customer_data"]
+      },
+      "metadata": {
+        "token_rotation_enabled": true,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "github_to_slack_notifications",
+      "json_data": {
+        "source_app": "github",
+        "destination_app": "slack",
+        "description": "GitHub PR and deployment notifications to Slack channels",
+        "oauth": {
+          "provider": "github",
+          "scopes": [
+            "repo",
+            "read:org",
+            "admin:repo_hook",
+            "write:discussion"
+          ]
+        },
+        "credentials": {
+          "github_token": "ghp_a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q7R8",
+          "slack_webhook": "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX",
+          "slack_bot_token": "xoxb-9876543210987-9876543210987-ZzYyXxWwVvUuTtSsRrQqPpOo"
+        },
+        "data_types": ["credentials"]
+      },
+      "metadata": {
+        "token_rotation_enabled": false,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "google_workspace_to_hubspot_contact_sync",
+      "json_data": {
+        "source_app": "google_workspace",
+        "destination_app": "hubspot",
+        "description": "Bi-directional Google Contacts to HubSpot CRM contact sync",
+        "oauth": {
+          "provider": "google",
+          "scopes": [
+            "https://www.googleapis.com/auth/contacts",
+            "https://www.googleapis.com/auth/contacts.readonly",
+            "https://www.googleapis.com/auth/directory.readonly",
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile"
+          ],
+          "client_secret": "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"
+        },
+        "credentials": {
+          "access_token": "ya29.a0AfH6SMDqkPzB_qX1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+          "refresh_token": "1//0d4xYz_AbCdEfGh-L9Ir5678901234567890abcdefghijklmnopqrstuvwxyz",
+          "expires_in_days": 7
+        },
+        "data_types": ["pii", "customer_data"]
+      },
+      "metadata": {
+        "token_rotation_enabled": true,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "aws_lambda_to_datadog_monitoring",
+      "json_data": {
+        "source_app": "aws",
+        "destination_app": "datadog",
+        "description": "Lambda function metrics and logs forwarded to Datadog",
+        "credentials": {
+          "aws_access_key_id": "AKIAIOSFODNN7EXAMPLE",
+          "aws_secret_access_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "datadog_api_key": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
+        },
+        "data_types": ["credentials", "secrets"]
+      },
+      "metadata": {
+        "token_rotation_enabled": false,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "zendesk_to_salesforce_case_escalation",
+      "json_data": {
+        "source_app": "zendesk",
+        "destination_app": "salesforce",
+        "description": "Auto-escalate Zendesk tickets to Salesforce Cases",
+        "oauth": {
+          "provider": "zendesk",
+          "scopes": [
+            "tickets:read",
+            "tickets:write",
+            "users:read",
+            "organizations:read"
+          ]
+        },
+        "credentials": {
+          "api_key": "dGVzdEBjb21wYW55LmNvbS90b2tlbjpYWFhYWFhYWFhYWFhYWFhY",
+          "expires_in_days": 30
+        },
+        "data_types": ["pii", "customer_data"]
+      },
+      "metadata": {
+        "token_rotation_enabled": true,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "okta_to_aws_sso_federation",
+      "json_data": {
+        "source_app": "okta",
+        "destination_app": "aws",
+        "description": "Okta SSO federation to AWS IAM Identity Center",
+        "oauth": {
+          "provider": "okta",
+          "scopes": [
+            "openid",
+            "profile",
+            "email",
+            "groups"
+          ]
+        },
+        "credentials": {
+          "access_token": "eyJraWQiOiJfVUtJbEhkSVRhbU5vdXgxMzBpc0ZEXzd5TGNhRGFhVEE2bGtYV3ciLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NvcnAub2t0YS5jb20iLCJhdWQiOiIwb2F4eHh4eHh4eCIsInN1YiI6InNzby1zZXJ2aWNlIn0.valid",
+          "expires_in_days": 1
+        },
+        "data_types": ["credentials"]
+      },
+      "metadata": {
+        "token_rotation_enabled": true,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "stripe_to_netsuite_billing_sync",
+      "json_data": {
+        "source_app": "stripe",
+        "destination_app": "netsuite",
+        "description": "Stripe payment events sync to NetSuite ERP",
+        "credentials": {
+          "stripe_secret_key": "sk_live_51ABCDefGHIjklMNOpqrSTUvwxyz1234567890abcdefghijklmnopqrs",
+          "stripe_webhook_secret": "whsec_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+          "netsuite_consumer_key": "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+          "netsuite_token_secret": "fedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321"
+        },
+        "webhook_url": "https://erp.company.com/netsuite/webhook?secret=whsec_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+        "data_types": ["financial", "pii"]
+      },
+      "metadata": {
+        "token_rotation_enabled": false,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "snowflake_to_tableau_analytics",
+      "json_data": {
+        "source_app": "snowflake",
+        "destination_app": "tableau",
+        "description": "Snowflake data warehouse connected to Tableau dashboards",
+        "credentials": {
+          "snowflake_account": "xy12345.us-east-1",
+          "snowflake_user": "TABLEAU_SERVICE_ACCOUNT",
+          "snowflake_password": "S3cur3P@ssw0rd!2024ForSnowflakeTableau",
+          "snowflake_private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0Z3VS5JJcds3xfn/ygWyF0PbnGcY5unA37GNwW1234567890\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/\n-----END RSA PRIVATE KEY-----"
+        },
+        "data_types": ["financial", "customer_data"]
+      },
+      "metadata": {
+        "token_rotation_enabled": false,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "servicenow_to_pagerduty_incident_routing",
+      "json_data": {
+        "source_app": "servicenow",
+        "destination_app": "pagerduty",
+        "description": "ServiceNow incidents auto-routed to PagerDuty on-call",
+        "oauth": {
+          "provider": "servicenow",
+          "scopes": [
+            "openid",
+            "profile"
+          ]
+        },
+        "credentials": {
+          "pagerduty_api_key": "u+a1B2c3D4e5F6g7H8i9J0",
+          "service_now_api_token": "ABcDeFgHiJkLmNoPqRsTuVwXyZ012345",
+          "expires_in_days": 60
+        }
+      },
+      "metadata": {
+        "token_rotation_enabled": true,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "workday_to_adp_payroll_sync",
+      "json_data": {
+        "source_app": "workday",
+        "destination_app": "adp",
+        "description": "Employee compensation data sync from Workday HCM to ADP payroll",
+        "oauth": {
+          "provider": "workday",
+          "scopes": [
+            "wd:workers:read",
+            "wd:compensation:read",
+            "wd:payroll:full_access",
+            "wd:benefits:read",
+            "wd:organizations:read"
+          ],
+          "client_secret": "WD-SECRET-a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        },
+        "credentials": {
+          "access_token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3b3JrZGF5LWludGVncmF0aW9uIiwiaXNzIjoiaHR0cHM6Ly93ZC1zZXJ2aWNlcy5teWNvbXBhbnkuY29tIiwiZXhwIjoxNzQwMDAwMDAwfQ.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnop",
+          "refresh_token": "wd-refresh-a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6",
+          "expires_in_days": 180
+        },
+        "data_types": ["pii", "financial", "health"]
+      },
+      "metadata": {
+        "token_rotation_enabled": false,
+        "environment": "production"
+      }
+    },
+
+    {
+      "integration_id": "dropbox_to_sharepoint_file_migration",
+      "json_data": {
+        "source_app": "dropbox",
+        "destination_app": "sharepoint",
+        "description": "One-time Dropbox Business to SharePoint Online file migration",
+        "oauth": {
+          "provider": "dropbox",
+          "scopes": [
+            "files.content.read",
+            "files.content.write",
+            "sharing.read",
+            "account_info.read"
+          ]
+        },
+        "credentials": {
+          "dropbox_access_token": "sl.B0abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ_-0123456789abcdef",
+          "sharepoint_client_secret": "xSP8Q~ABCDefgh1234567890ijklmnopQRSTUVWX",
+          "expires_in_days": 14
+        },
+        "data_types": ["customer_data"]
+      },
+      "metadata": {
+        "token_rotation_enabled": true,
+        "environment": "staging"
+      }
+    }
+
+  ]
+}

@@ -1,0 +1,126 @@
+high_risk_scopes:
+  # ── Microsoft Graph / generic OAuth scopes ──────────────────────────────
+  - pattern: "admin"
+    severity: 5
+    description: "Administrative access grants full control over the tenant"
+  - pattern: "full_access"
+    severity: 5
+    description: "Unrestricted access to all resources"
+  - pattern: "offline_access"
+    severity: 4
+    description: "Allows token refresh without user interaction — persistent access"
+  - pattern: "mail.send"
+    severity: 4
+    description: "Can send email on behalf of users — phishing vector"
+  - pattern: "files.readwrite"
+    severity: 4
+    description: "Read/write access to all user files"
+  - pattern: "directory.readwrite"
+    severity: 5
+    description: "Can modify directory objects including users and groups"
+  - pattern: "users.readwrite"
+    severity: 5
+    description: "Full user management — account creation, deletion, role changes"
+  - pattern: "drive.*"
+    severity: 4
+    description: "Wildcard Google Drive access across all file operations"
+  - pattern: "calendar.readwrite"
+    severity: 3
+    description: "Can read and modify calendar events including meeting details"
+  - pattern: "contacts.readwrite"
+    severity: 3
+    description: "Access to modify contact lists — PII exposure risk"
+  - pattern: "group.readwrite"
+    severity: 4
+    description: "Can modify security and distribution groups"
+  - pattern: "sites.manage.all"
+    severity: 5
+    description: "SharePoint site collection management — data exfiltration risk"
+  - pattern: "organization.readwrite"
+    severity: 5
+    description: "Can modify organization-level settings"
+
+  # ── Atlassian Connect / Forge scopes ────────────────────────────────────
+  - pattern: "act_as_user"
+    severity: 5
+    description: "Atlassian ACT_AS_USER — impersonate any user in the instance"
+  - pattern: "write"
+    severity: 4
+    description: "Atlassian WRITE scope — can create and modify content"
+  - pattern: "delete"
+    severity: 5
+    description: "Atlassian DELETE scope — can permanently remove content"
+  - pattern: "project_admin"
+    severity: 5
+    description: "Atlassian PROJECT_ADMIN — full project configuration control"
+  - pattern: "space_admin"
+    severity: 5
+    description: "Confluence SPACE_ADMIN — full space management"
+  - pattern: "manage:jira-configuration"
+    severity: 5
+    description: "Forge scope — manage Jira global configuration"
+  - pattern: "manage:jira-project"
+    severity: 4
+    description: "Forge scope — manage Jira project settings"
+  - pattern: "write:jira-work"
+    severity: 4
+    description: "Forge scope — create and edit Jira issues"
+  - pattern: "manage:confluence-space"
+    severity: 5
+    description: "Forge scope — manage Confluence spaces"
+  - pattern: "write:confluence-content"
+    severity: 4
+    description: "Forge scope — create and edit Confluence pages"
+
+  # ── Slack bot / user scopes ─────────────────────────────────────────────
+  - pattern: "admin"
+    severity: 5
+    description: "Slack admin scope — full workspace administration"
+  - pattern: "channels:manage"
+    severity: 4
+    description: "Slack — create/archive/rename channels"
+  - pattern: "chat:write"
+    severity: 3
+    description: "Slack — post messages as the app"
+  - pattern: "files:write"
+    severity: 4
+    description: "Slack — upload and manage files"
+  - pattern: "users:write"
+    severity: 5
+    description: "Slack — modify user profiles"
+  - pattern: "users.profile:write"
+    severity: 5
+    description: "Slack — modify user profile fields"
+
+wildcard_patterns:
+  - "*"
+  - ".*"
+  - ".all"
+  - "full_access"
+
+over_permission_thresholds:
+  wildcard_scope_trigger: 1
+  high_risk_scope_trigger: 2
+  total_scope_trigger: 8
+
+safe_scopes:
+  - "openid"
+  - "profile"
+  - "email"
+  - "read"
+  - "user.read"
+  - "contacts.read"
+  - "calendars.read"
+  - "files.read"
+  # Atlassian
+  - "read:jira-work"
+  - "read:jira-user"
+  - "read:confluence-content.all"
+  - "read:confluence-user"
+  # Slack
+  - "channels:read"
+  - "chat:write"
+  - "users:read"
+  - "team:read"
+  - "groups:read"
+  - "im:read"

@@ -1,0 +1,186 @@
+# ISPM (Integration Security Posture Management) category catalog.
+#
+# Categories group SaaS providers into business-oriented buckets for posture
+# rollups (counts by grade, average risk, etc.). Each category has its own
+# posture thresholds for grading risk scores.
+#
+# Posture grading semantics:
+#   risk_score <= compliant       -> COMPLIANT
+#   compliant < risk_score <= at_risk -> AT_RISK
+#   risk_score > at_risk          -> CRITICAL
+#
+# Edit categories, provider_map, defaults, or override per-customer at runtime
+# via PUT /ispm/categories or PUT /ispm/providers/{provider_id}.
+
+default_category_id: other
+default_thresholds:
+  compliant: 30
+  at_risk: 60
+
+categories:
+  - id: identity
+    label: Identity & Access
+    description: IdPs, SSO, directory services, privileged access management
+    posture_thresholds:
+      compliant: 25
+      at_risk: 55
+  - id: communication
+    label: Communication & Messaging
+    description: Chat, email, video, calendaring
+    posture_thresholds:
+      compliant: 30
+      at_risk: 60
+  - id: productivity
+    label: Productivity & Files
+    description: Office suites, file sync, document collaboration
+    posture_thresholds:
+      compliant: 30
+      at_risk: 60
+  - id: dev_code
+    label: Development & Source Code
+    description: Source control, CI/CD, package registries
+    posture_thresholds:
+      compliant: 25
+      at_risk: 55
+  - id: crm_sales
+    label: CRM & Sales
+    description: Customer relationship, sales engagement, marketing automation
+    posture_thresholds:
+      compliant: 30
+      at_risk: 60
+  - id: itsm_support
+    label: ITSM & Support
+    description: Service desks, ticketing, on-call, incident management
+    posture_thresholds:
+      compliant: 30
+      at_risk: 60
+  - id: hr_people
+    label: HR & People
+    description: HRIS, payroll, workforce management
+    posture_thresholds:
+      compliant: 25
+      at_risk: 55
+  - id: finance
+    label: Finance & Billing
+    description: Billing, payments, ERP, expense management
+    posture_thresholds:
+      compliant: 25
+      at_risk: 55
+  - id: data_analytics
+    label: Data & Analytics
+    description: Warehouses, BI, observability, data integration
+    posture_thresholds:
+      compliant: 30
+      at_risk: 60
+  - id: storage
+    label: Storage & Cloud Infrastructure
+    description: Object storage, IaaS, container platforms
+    posture_thresholds:
+      compliant: 30
+      at_risk: 60
+  - id: ai_ml
+    label: AI & Machine Learning
+    description: LLM providers, AI copilots, vector stores
+    posture_thresholds:
+      compliant: 20
+      at_risk: 50
+  - id: security
+    label: Security & Compliance
+    description: SIEM, EDR, DLP, secrets managers, GRC
+    posture_thresholds:
+      compliant: 25
+      at_risk: 55
+  - id: ipaas_automation
+    label: iPaaS & Automation
+    description: Workflow automation, integration platforms
+    posture_thresholds:
+      compliant: 30
+      at_risk: 60
+  - id: other
+    label: Other
+    description: Uncategorized providers
+    posture_thresholds:
+      compliant: 30
+      at_risk: 60
+
+provider_map:
+  # Identity
+  microsoft_entra: identity
+  azure_ad: identity
+  okta: identity
+  onelogin: identity
+  ping: identity
+  jumpcloud: identity
+  cyberark: identity
+  # Communication
+  slack: communication
+  microsoft_teams: communication
+  zoom: communication
+  # Productivity
+  microsoft365: productivity
+  microsoft_365: productivity
+  google_workspace: productivity
+  google: productivity
+  dropbox: productivity
+  box: productivity
+  notion: productivity
+  # Dev / code
+  github: dev_code
+  gitlab: dev_code
+  bitbucket: dev_code
+  jenkins: dev_code
+  circleci: dev_code
+  # CRM / sales
+  salesforce: crm_sales
+  hubspot: crm_sales
+  marketo: crm_sales
+  # ITSM / support
+  jira: itsm_support
+  atlassian: itsm_support
+  servicenow: itsm_support
+  zendesk: itsm_support
+  pagerduty: itsm_support
+  freshdesk: itsm_support
+  # HR / people
+  workday: hr_people
+  bamboohr: hr_people
+  rippling: hr_people
+  adp: hr_people
+  gusto: hr_people
+  # Finance
+  stripe: finance
+  netsuite: finance
+  quickbooks: finance
+  # Data / analytics
+  snowflake: data_analytics
+  databricks: data_analytics
+  tableau: data_analytics
+  looker: data_analytics
+  datadog: data_analytics
+  segment: data_analytics
+  # Storage / infra
+  aws: storage
+  amazon_aws: storage
+  gcp: storage
+  google_cloud: storage
+  azure: storage
+  # AI / ML
+  openai: ai_ml
+  anthropic: ai_ml
+  claude: ai_ml
+  copilot: ai_ml
+  github_copilot: ai_ml
+  gemini: ai_ml
+  vertex_ai: ai_ml
+  # Security
+  crowdstrike: security
+  okta_workflows: security
+  splunk: security
+  sentinelone: security
+  hashicorp_vault: security
+  # iPaaS / automation
+  workato: ipaas_automation
+  zapier: ipaas_automation
+  tray: ipaas_automation
+  make: ipaas_automation
+  n8n: ipaas_automation

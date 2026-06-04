@@ -1,0 +1,391 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# SaaSShadow.ai — YAML Policy Rules
+#
+# CONTEXT RULES  evaluate structured fields extracted from the integration
+#                config (OAuth scope counts, token flags, data-flow signals).
+#                They answer: "Is this integration *configured* dangerously?"
+#
+# TEXT-SCAN RULES  scan the raw serialised content for literal secret material
+#                  using regex, keyword, and Shannon-entropy detection.
+#                  They answer: "Are *actual credentials* leaking in this artifact?"
+#
+# Available context fields (injected by the pipeline):
+#   oauth_scope_count, oauth_high_risk_scope_count, oauth_wildcard_scope_count,
+#   oauth_over_permission, oauth_scope_risk_score,
+#   token_misuse_count, tokens_found, tokens_in_urls, long_lived_tokens,
+#   weak_tokens, token_rotation_disabled, token_shared_across_integrations,
+#   cross_platform_data_exposure, sensitive_data_exposed,
+#   source_app, destination_app, token_rotation_enabled,
+#   + any key passed in the request's metadata object
+#
+# Operators: eq, neq, in, not_in, contains, not_contains,
+#            gte, lte, gt, lt, matches, exists, not_exists
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  CONTEXT RULES — SaaS integration configuration risk
+# ═══════════════════════════════════════════════════════════════════════════════
+
+rules:
+
+  # ── OAuth scope governance ────────────────────────────────────────────────
+
+  - name: "oauth_over_permission"
+    severity: 5
+    weight: 22
+    enabled: true
+    patterns:
+      - field: "oauth_over_permission"
+        op: "eq"
+        value: true
+
+  - name: "oauth_wildcard_scopes_present"
+    severity: 4
+    weight: 18
+    enabled: true
+    patterns:
+      - field: "oauth_wildcard_scope_count"
+        op: "gte"
+        value: 1
+
+  - name: "oauth_multiple_high_risk_scopes"
+    severity: 4
+    weight: 16
+    enabled: true
+    patterns:
+      - field: "oauth_high_risk_scope_count"
+        op: "gte"
+        value: 2
+
+  - name: "oauth_excessive_scope_count"
+    severity: 3
+    weight: 10
+    enabled: true
+    patterns:
+      - field: "oauth_scope_count"
+        op: "gte"
+        value: 6
+
+  # ── API token hygiene ─────────────────────────────────────────────────────
+
+  - name: "token_rotation_disabled"
+    severity: 4
+    weight: 16
+    enabled: true
+    patterns:
+      - field: "token_rotation_disabled"
+        op: "eq"
+        value: true
+
+  - name: "token_reuse_across_integrations"
+    severity: 5
+    weight: 20
+    enabled: true
+    patterns:
+      - field: "token_shared_across_integrations"
+        op: "eq"
+        value: true
+
+  - name: "token_in_url_detected"
+    severity: 4
+    weight: 14
+    enabled: true
+    patterns:
+      - field: "tokens_in_urls"
+        op: "gte"
+        value: 1
+
+  - name: "long_lived_token_detected"
+    severity: 3
+    weight: 12
+    enabled: true
+    patterns:
+      - field: "long_lived_tokens"
+        op: "gte"
+        value: 1
+
+  - name: "weak_token_format_detected"
+    severity: 3
+    weight: 10
+    enabled: true
+    patterns:
+      - field: "weak_tokens"
+        op: "gte"
+        value: 1
+
+  - name: "multiple_token_misuse_patterns"
+    severity: 5
+    weight: 20
+    enabled: true
+    patterns:
+      - field: "token_misuse_count"
+        op: "gte"
+        value: 3
+
+  # ── Cross-platform data flow ──────────────────────────────────────────────
+
+  - name: "cross_platform_sensitive_data_flow"
+    severity: 5
+    weight: 24
+    enabled: true
+    patterns:
+      - field: "cross_platform_data_exposure"
+        op: "eq"
+        value: true
+
+  - name: "sensitive_data_types_present"
+    severity: 3
+    weight: 10
+    enabled: true
+    patterns:
+      - field: "sensitive_data_exposed"
+        op: "eq"
+        value: true
+
+  # ── Compound risk (multiple dimensions failing together) ──────────────────
+
+  - name: "critical_combo_oauth_plus_no_rotation"
+    severity: 5
+    weight: 24
+    enabled: true
+    patterns:
+      - field: "oauth_over_permission"
+        op: "eq"
+        value: true
+      - field: "token_rotation_disabled"
+        op: "eq"
+        value: true
+
+  - name: "critical_combo_shared_token_plus_cross_platform"
+    severity: 5
+    weight: 26
+    enabled: true
+    patterns:
+      - field: "token_shared_across_integrations"
+        op: "eq"
+        value: true
+      - field: "cross_platform_data_exposure"
+        op: "eq"
+        value: true
+
+  # ── ARM template / connector wiring ──────────────────────────────────────
+
+  - name: "arm_insecure_secret_parameters"
+    severity: 4
+    weight: 16
+    enabled: true
+    patterns:
+      - field: "arm_insecure_params"
+        op: "gte"
+        value: 1
+
+  - name: "arm_inline_credentials_detected"
+    severity: 5
+    weight: 22
+    enabled: true
+    patterns:
+      - field: "arm_inline_credentials"
+        op: "gte"
+        value: 1
+
+  # ── Workflow automation risk ─────────────────────────────────────────────
+
+  - name: "workflow_inline_credentials"
+    severity: 4
+    weight: 18
+    enabled: true
+    patterns:
+      - field: "workflow_findings_count"
+        op: "gte"
+        value: 1
+
+  - name: "workflow_high_credential_refs"
+    severity: 3
+    weight: 10
+    enabled: true
+    patterns:
+      - field: "workflow_credential_refs"
+        op: "gte"
+        value: 3
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  TEXT-SCAN RULES — credential & secret detection in raw content
+# ═══════════════════════════════════════════════════════════════════════════════
+
+text_scan_rules:
+
+  # ── OAuth / bearer token exposure ─────────────────────────────────────────
+
+  - id: "saas_bearer_token"
+    category: "regex"
+    pattern: '(?i)\bBearer\s+[A-Za-z0-9\-_\.]{20,}\b'
+    severity: 5
+    weight: 26
+    enabled: true
+    description: "Exposed Bearer token in SaaS integration config"
+
+  - id: "saas_oauth_client_secret"
+    category: "regex"
+    pattern: '(?i)client[_-]?secret\s*[:=]\s*[^\s"]{8,}'
+    severity: 5
+    weight: 24
+    enabled: true
+    description: "OAuth client_secret value in plaintext"
+
+  - id: "saas_oauth_refresh_token"
+    category: "regex"
+    pattern: '(?i)refresh[_-]?token\s*[:=]\s*[^\s"]{16,}'
+    severity: 5
+    weight: 24
+    enabled: true
+    description: "Refresh token exposed — allows persistent re-authentication"
+
+  # ── API key / service account exposure ────────────────────────────────────
+
+  - id: "saas_api_key_assignment"
+    category: "regex"
+    pattern: '(?i)(?:api[_-]?key|x-api-key)\s*[:=]\s*[A-Za-z0-9\-_]{16,}'
+    severity: 5
+    weight: 24
+    enabled: true
+    description: "API key assigned in plaintext integration config"
+
+  - id: "saas_aws_access_key"
+    category: "regex"
+    pattern: '(?:AKIA|ASIA)[A-Z0-9]{16}'
+    severity: 5
+    weight: 26
+    enabled: true
+    description: "AWS IAM access key ID (AKIA*/ASIA*) in integration artifact"
+
+  - id: "saas_github_pat"
+    category: "regex"
+    pattern: 'gh[ps]_[A-Za-z0-9]{36,}'
+    severity: 5
+    weight: 26
+    enabled: true
+    description: "GitHub Personal Access Token or service token"
+
+  - id: "saas_slack_token"
+    category: "regex"
+    pattern: 'xox[baprs]-[A-Za-z0-9\-]{10,}'
+    severity: 5
+    weight: 24
+    enabled: true
+    description: "Slack bot/user/app token in integration config"
+
+  - id: "saas_private_key_block"
+    category: "regex"
+    pattern: '-----BEGIN (?:RSA |EC |DSA )?PRIVATE KEY-----'
+    severity: 5
+    weight: 28
+    enabled: true
+    description: "Private key PEM block embedded in SaaS integration artifact"
+
+  # ── Token-in-URL exposure ─────────────────────────────────────────────────
+
+  - id: "saas_token_in_url"
+    category: "regex"
+    pattern: '(?i)(?:access_token|token|api_key|apikey|secret)=[^\s&"]{8,}'
+    severity: 4
+    weight: 16
+    enabled: true
+    description: "Credential passed as URL query parameter"
+
+  - id: "saas_webhook_secret_in_url"
+    category: "regex"
+    pattern: '(?i)https?://[^\s]*(?:webhook|hook|callback)[^\s]*(?:secret|token|key)=[^\s&"]{6,}'
+    severity: 4
+    weight: 14
+    enabled: true
+    description: "Webhook URL contains embedded secret/token parameter"
+
+  # ── Keyword signals (lower severity — may be structural, not leaked) ─────
+
+  - id: "saas_password_keyword"
+    category: "keyword"
+    pattern: "password"
+    severity: 3
+    weight: 8
+    enabled: true
+    description: "Plaintext 'password' reference in integration artifact"
+
+  - id: "saas_secret_keyword"
+    category: "keyword"
+    pattern: "client_secret"
+    severity: 4
+    weight: 10
+    enabled: true
+    description: "Reference to client_secret field — check if value is exposed"
+
+  - id: "saas_private_key_keyword"
+    category: "keyword"
+    pattern: "private_key"
+    severity: 4
+    weight: 12
+    enabled: true
+    description: "Reference to private_key — check for embedded key material"
+
+  # ── ARM template / connector wiring ──────────────────────────────────────
+
+  - id: "saas_arm_insecure_param"
+    category: "regex"
+    pattern: '(?i)"type"\s*:\s*"string"[^}]*(?:password|secret|key|token|credential|connectionstring)'
+    severity: 4
+    weight: 18
+    enabled: true
+    description: "ARM parameter uses 'string' instead of 'secureString' for secret value"
+
+  - id: "saas_arm_connection_string"
+    category: "regex"
+    pattern: '(?i)(?:Server|Data Source)\s*=\s*[^;]+;[^"]*(?:Password|Pwd)\s*=\s*[^\s;"]+'
+    severity: 5
+    weight: 24
+    enabled: true
+    description: "SQL connection string with embedded password in ARM template"
+
+  - id: "saas_azure_storage_key"
+    category: "regex"
+    pattern: '(?i)AccountKey\s*=\s*[A-Za-z0-9+/=]{40,}'
+    severity: 5
+    weight: 26
+    enabled: true
+    description: "Azure Storage account key in connection string"
+
+  - id: "saas_arm_connections_object"
+    category: "keyword"
+    pattern: "$connections"
+    severity: 3
+    weight: 8
+    enabled: true
+    description: "ARM $connections object — verify connection references are secured"
+
+  # ── Workflow automation secrets ─────────────────────────────────────────
+
+  - id: "saas_n8n_decrypted_credential"
+    category: "regex"
+    pattern: '(?i)"type"\s*:\s*"[^"]*[Aa]pi[^"]*"[^}]*"data"\s*:\s*\{'
+    severity: 5
+    weight: 26
+    enabled: true
+    description: "n8n decrypted credential export — plaintext API credentials"
+
+  - id: "saas_webhook_secret_embedded"
+    category: "regex"
+    pattern: '(?i)(?:webhook|hook|callback)[^\s"]*(?:secret|token|key|password)=[^\s"&]{8,}'
+    severity: 4
+    weight: 16
+    enabled: true
+    description: "Webhook URL with embedded secret parameter in workflow"
+
+  # ── Entropy detection (catches obfuscated / novel credential formats) ────
+
+  - id: "saas_high_entropy_credential"
+    category: "entropy"
+    pattern: "4.3"
+    severity: 4
+    weight: 14
+    enabled: true
+    description: "High-entropy string (>4.3 bits/char) resembling a leaked credential"

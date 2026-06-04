@@ -1,0 +1,297 @@
+{
+  "dataset_name": "artifact_families_test_dataset",
+  "items": [
+    {
+      "integration_id": "slack_app_manifest",
+      "json_data": {
+        "display_information": {
+          "name": "DataSync Bot",
+          "description": "Syncs customer data between CRM and Slack"
+        },
+        "oauth_config": {
+          "scopes": {
+            "bot": [
+              "channels:read",
+              "channels:manage",
+              "chat:write",
+              "files:write",
+              "users:read",
+              "users:write",
+              "admin"
+            ],
+            "user": [
+              "files:read",
+              "users.profile:write"
+            ]
+          },
+          "redirect_urls": [
+            "https://app.example.com/oauth/callback"
+          ]
+        },
+        "features": {
+          "bot_user": {
+            "display_name": "DataSync",
+            "always_online": true
+          }
+        },
+        "settings": {
+          "event_subscriptions": {
+            "request_url": "https://app.example.com/events",
+            "bot_events": ["message.channels", "member_joined_channel"]
+          }
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "integration_id": "atlassian_connect_descriptor",
+      "json_data": {
+        "key": "com.example.jira-addon",
+        "name": "Project Exporter",
+        "description": "Exports Jira data to external warehouse",
+        "vendor": { "name": "Example Corp", "url": "https://example.com" },
+        "baseUrl": "https://addon.example.com",
+        "authentication": { "type": "jwt" },
+        "scopes": ["READ", "WRITE", "ACT_AS_USER", "PROJECT_ADMIN"],
+        "modules": {
+          "webPanels": [
+            { "key": "export-panel", "url": "/panel" }
+          ]
+        },
+        "apiMigrations": { "gdpr": true }
+      },
+      "metadata": {}
+    },
+    {
+      "integration_id": "entra_app_manifest",
+      "json_data": {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "appId": "11111111-2222-3333-4444-555555555555",
+        "displayName": "Enterprise Data Connector",
+        "requiredResourceAccess": [
+          {
+            "resourceAppId": "00000003-0000-0000-c000-000000000000",
+            "resourceAccess": [
+              { "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d", "type": "Scope" },
+              { "id": "e383f46e-2787-4529-855e-0e479a3ffac0", "type": "Scope" },
+              { "id": "863451e7-0667-486c-a5d6-d135439485f0", "type": "Scope" },
+              { "id": "e2a3a72e-5f79-4c64-b1b1-878b674786c9", "type": "Scope" },
+              { "id": "204e0828-b5ca-4571-a349-6743c2258ba2", "type": "Scope" },
+              { "id": "19dbc75e-c2e2-444c-a770-ec596d67c8f0", "type": "Role" }
+            ]
+          }
+        ],
+        "signInAudience": "AzureADMultipleOrgs"
+      },
+      "metadata": {}
+    },
+    {
+      "integration_id": "google_client_secret",
+      "json_data": {
+        "installed": {
+          "client_id": "123456789-abcdef.apps.googleusercontent.com",
+          "client_secret": "GOCSPX-abcdefghijklmnop123456",
+          "project_id": "my-project-12345",
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://oauth2.googleapis.com/token",
+          "redirect_uris": ["urn:ietf:wg:oauth:2.0:oob", "http://localhost"]
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "integration_id": "logic_apps_workflow",
+      "json_data": {
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "triggers": {
+            "When_a_new_email_arrives": {
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['office365']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/Mail/OnNewEmail"
+              }
+            }
+          },
+          "actions": {
+            "Send_to_Slack": {
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['slack']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/chat.postMessage",
+                "body": { "channel": "#alerts", "text": "@triggerBody()?['Subject']" }
+              }
+            },
+            "Store_in_SQL": {
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['sql']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/datasets/default/tables/emails/items",
+                "authentication": {
+                  "type": "basic",
+                  "password": "SuperSecret123!"
+                }
+              }
+            }
+          }
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "office365": {
+                "connectionId": "/subscriptions/xxx/providers/Microsoft.Web/connections/office365",
+                "id": "/subscriptions/xxx/providers/Microsoft.Web/locations/eastus/managedApis/office365"
+              },
+              "slack": {
+                "connectionId": "/subscriptions/xxx/providers/Microsoft.Web/connections/slack",
+                "id": "/subscriptions/xxx/providers/Microsoft.Web/locations/eastus/managedApis/slack"
+              },
+              "sql": {
+                "connectionId": "/subscriptions/xxx/providers/Microsoft.Web/connections/sql",
+                "id": "/subscriptions/xxx/providers/Microsoft.Web/locations/eastus/managedApis/sql"
+              }
+            }
+          }
+        },
+        "source_app": "office365",
+        "destination_app": "slack",
+        "data_types": ["pii", "customer_data"]
+      },
+      "metadata": {}
+    },
+    {
+      "integration_id": "step_functions_workflow",
+      "json_data": {
+        "Comment": "ETL pipeline: extract from Salesforce, transform, load to Redshift",
+        "StartAt": "ExtractFromSalesforce",
+        "States": {
+          "ExtractFromSalesforce": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:us-east-1:123456789:function:sf-extract",
+            "Parameters": {
+              "api_key": "sf_live_key_ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+              "endpoint": "https://api.salesforce.com/data/v54.0/query"
+            },
+            "Next": "TransformData"
+          },
+          "TransformData": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:us-east-1:123456789:function:transform",
+            "Next": "LoadToRedshift"
+          },
+          "LoadToRedshift": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::redshift-data:executeStatement",
+            "Parameters": {
+              "ClusterIdentifier": "my-cluster",
+              "Database": "analytics",
+              "SecretArn": "arn:aws:secretsmanager:us-east-1:123456789:secret:redshift-creds"
+            },
+            "End": true
+          }
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "integration_id": "n8n_workflow_export",
+      "json_data": {
+        "name": "CRM to Spreadsheet Sync",
+        "nodes": [
+          {
+            "name": "HubSpot Trigger",
+            "type": "n8n-nodes-base.hubspot",
+            "parameters": {
+              "resource": "contact",
+              "operation": "getAll",
+              "authentication": "oAuth2"
+            },
+            "credentials": {
+              "hubspotOAuth2Api": { "id": "1", "name": "HubSpot account" }
+            }
+          },
+          {
+            "name": "Google Sheets",
+            "type": "n8n-nodes-base.googleSheets",
+            "parameters": {
+              "operation": "append",
+              "sheetId": "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms",
+              "secret": "gsheet_write_key_123456789012345678"
+            },
+            "credentials": {
+              "googleSheetsOAuth2Api": { "id": "2", "name": "Google Sheets" }
+            }
+          },
+          {
+            "name": "Slack Notification",
+            "type": "n8n-nodes-base.slack",
+            "parameters": {
+              "channel": "#crm-updates",
+              "text": "New contacts synced: {{ $json.count }}"
+            },
+            "credentials": {
+              "slackOAuth2Api": { "id": "3", "name": "Slack Bot" }
+            }
+          }
+        ],
+        "connections": {
+          "HubSpot Trigger": { "main": [[ { "node": "Google Sheets", "type": "main", "index": 0 } ]] },
+          "Google Sheets": { "main": [[ { "node": "Slack Notification", "type": "main", "index": 0 } ]] }
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "integration_id": "arm_template_insecure",
+      "json_data": {
+        "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {
+          "sqlServerPassword": {
+            "type": "string",
+            "defaultValue": "P@ssw0rd123!"
+          },
+          "storageAccountKey": {
+            "type": "string",
+            "defaultValue": "abc123DEF456ghi789JKL012mno345PQR678stu901VWX234yz"
+          },
+          "appName": {
+            "type": "string",
+            "defaultValue": "myapp"
+          }
+        },
+        "resources": [
+          {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2021-11-01",
+            "name": "[parameters('appName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+              "administratorLogin": "sqladmin",
+              "administratorLoginPassword": "[parameters('sqlServerPassword')]"
+            }
+          }
+        ],
+        "source_app": "azure_sql",
+        "destination_app": "azure_storage",
+        "data_types": ["credentials", "customer_data"]
+      },
+      "metadata": {}
+    }
+  ]
+}

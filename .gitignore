@@ -1,0 +1,59 @@
+venv/
+**/__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.log
+.env
+
+# Dependencies
+node_modules/
+
+# Next.js (frontend)
+.next/
+out/
+
+# Build / output
+dist/
+build/
+.turbo
+
+# Env and secrets
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug and logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing / coverage
+coverage/
+.nyc_output/
+
+# Misc
+.cache/
+.vercel
+.eslintcache
+
+# Persistent stores (SQLite databases are created at runtime)
+*.db
+*.sqlite
+*.sqlite-*
+data/scans.db
