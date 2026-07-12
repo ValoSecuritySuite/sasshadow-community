@@ -48,8 +48,7 @@ reporting packs, learning-loop tuning, extended ISPM posture views, custom
 report branding, and additional connectors (Google Workspace, Okta, GitHub,
 Atlassian). Those capabilities are not included in this repository.
 
-Contact your Valo representative or visit [saasshadow.ai](https://saasshadow.ai)
-for Enterprise licensing.
+Contact your Valo representative or visit valosecurity.ai for Enterprise licensing.
 
 ## Local development
 
