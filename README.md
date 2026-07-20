@@ -61,6 +61,24 @@ Inventory Database
 
 ---
 
+## Quick start (Docker)
+
+```bash
+# One-command launcher
+./start.sh          # macOS / Linux
+start.bat           # Windows (double-click, or from cmd/PowerShell)
+
+# Or Compose directly
+docker compose up --build
+```
+
+| Service | URL |
+|---------|-----|
+| Dashboard | http://localhost:3000 |
+| API + interactive docs | http://localhost:8000/docs |
+
+---
+
 ## Roadmap
 
 - Slack
@@ -106,4 +124,3 @@ Apache 2.0
 ## Learn More
 
 https://valosecurity.ai
-
